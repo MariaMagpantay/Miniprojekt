@@ -17,7 +17,7 @@ namespace Service
         {
             Tråd tråd = db.Tråde.FirstOrDefault()!;
             Kommentar testKommentar = new Kommentar(1,1,"test", "Mikkel", 0, new DateTime(2022, 10, 12));
-            Tråd testTråd = new Tråd();
+            Tråd testTråd = new Tråd(1, "Hans", "test overskrift", 0, new DateTime(2022, 10, 12), "test indhold");
             testTråd.KommentarListe.Add(testKommentar);
             if (tråd == null)
             {

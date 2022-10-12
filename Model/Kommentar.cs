@@ -11,8 +11,16 @@
             this.Stemmer = stemmer;
             this.Dato = dato;
         }
+        public Kommentar(long kommentarID, long trådID, string tekst, string kForfatter, long stemmer)
+        {
+            this.KommentarID = kommentarID;
+            this.TrådID = trådID;
+            this.Tekst = tekst;
+            this.KForfatter = kForfatter;
+            this.Stemmer = stemmer;
+        }
 
-        
+
 
         public long KommentarID { get; set; }   
         public long TrådID { get; set; }    
