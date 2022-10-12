@@ -17,17 +17,31 @@ namespace Reddit_API.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.10");
 
+            modelBuilder.Entity("Model.Bruger", b =>
+                {
+                    b.Property<long>("BrugerID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("BrugerNavn")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("BrugerID");
+
+                    b.ToTable("Bruger");
+                });
+
             modelBuilder.Entity("Model.Kommentar", b =>
                 {
                     b.Property<long>("KommentarID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Dato")
-                        .HasColumnType("TEXT");
+                    b.Property<long>("BrugerID")
+                        .HasColumnType("INTEGER");
 
-                    b.Property<string>("KForfatter")
-                        .IsRequired()
+                    b.Property<DateTime>("Dato")
                         .HasColumnType("TEXT");
 
                     b.Property<long>("Stemmer")
@@ -42,6 +56,8 @@ namespace Reddit_API.Migrations
 
                     b.HasKey("KommentarID");
 
+                    b.HasIndex("BrugerID");
+
                     b.HasIndex("TrådID");
 
                     b.ToTable("Kommentar");
@@ -53,7 +69,10 @@ namespace Reddit_API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Dato")
+                    b.Property<long>("BrugerID")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("Dato")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Indhold")
@@ -67,22 +86,39 @@ namespace Reddit_API.Migrations
                     b.Property<long>("Stemmer")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("TForfatter")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
                     b.HasKey("TrådID");
+
+                    b.HasIndex("BrugerID");
 
                     b.ToTable("Tråde");
                 });
 
             modelBuilder.Entity("Model.Kommentar", b =>
                 {
+                    b.HasOne("Model.Bruger", "Bruger")
+                        .WithMany()
+                        .HasForeignKey("BrugerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Model.Tråd", null)
                         .WithMany("KommentarListe")
                         .HasForeignKey("TrådID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Bruger");
+                });
+
+            modelBuilder.Entity("Model.Tråd", b =>
+                {
+                    b.HasOne("Model.Bruger", "Bruger")
+                        .WithMany()
+                        .HasForeignKey("BrugerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Bruger");
                 });
 
             modelBuilder.Entity("Model.Tråd", b =>

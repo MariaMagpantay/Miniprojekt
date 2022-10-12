@@ -2,20 +2,20 @@
 {
     public class Tråd
     {
-        public Tråd (long trådID, string tForfatter, string overskrift, long stemmer, DateTime dato, string indhold, List<Kommentar> kommentarListe)
+        public Tråd (long trådID, Bruger bruger, string overskrift, long stemmer, DateTime dato, string indhold, List<Kommentar> kommentarListe)
         {
             this.TrådID = trådID;
-            this.TForfatter = tForfatter;
+            this.Bruger = bruger;
             this.Overskrift = overskrift;
             this.Stemmer = stemmer;
             this.Dato = dato;
             this.Indhold = indhold;
             this.KommentarListe = kommentarListe;
         }
-        public Tråd(long trådID, string tForfatter, string overskrift, long stemmer, DateTime dato, string indhold)
+        public Tråd(long trådID, Bruger bruger, string overskrift, long stemmer, DateTime dato, string indhold)
         {
             this.TrådID = trådID;
-            this.TForfatter = tForfatter;
+            this.Bruger = bruger;
             this.Overskrift = overskrift;
             this.Stemmer = stemmer;
             this.Dato = dato;
@@ -24,7 +24,7 @@
 
 
         public long TrådID { get; set; }
-        public string TForfatter { get; set; }
+        public Bruger Bruger { get; set; }
         public string Overskrift { get; set; }
         public long Stemmer { get; set; }
         public DateTime? Dato { get; set; }
