@@ -1,8 +1,6 @@
-﻿using Model;
-using Data;
+﻿using Data;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Http.Json;
-using System.Text.Json;
+using Model;
 
 namespace Service
 {
@@ -10,7 +8,7 @@ namespace Service
     {
         private TrådContext db { get; }
 
-        public DataService (TrådContext db)
+        public DataService(TrådContext db)
         {
             this.db = db;
         }
@@ -55,11 +53,11 @@ namespace Service
 
         public Tråd GetTråd(int id)
         {
-            return db.Tråde.Include(t => t.Bruger).Include(t => t.KommentarListe).FirstOrDefault(t => t.TrådID == id);
+            return db.Tråde.Include(t => t.Bruger).Include(t => t.KommentarListe).ThenInclude(t => t.Bruger).FirstOrDefault(t => t.TrådID == id);
             //var result = await httpClient.GetFromJsonAsync<Tråd>("api/tråd/" + id);
             //return result;
         }
-                
+
         //////////Er nedenstående metode nødvendig?
         public List<Tråd> GetAlleKommentarer()
         {
@@ -71,10 +69,19 @@ namespace Service
         //POST metoder
         public string CreateTråd(int brugerID, string overskrift, string indhold)
         {
-            Bruger bruger = db.Brugerer.FirstOrDefault(a => a.BrugerID == brugerID);
-            db.Tråde.Add(new Tråd { Bruger = bruger , Overskrift = overskrift, Indhold = indhold });
+            Bruger bruger = db.Brugerer.FirstOrDefault(b => b.BrugerID == brugerID);
+            db.Tråde.Add(new Tråd { Bruger = bruger, Overskrift = overskrift, Indhold = indhold });
             db.SaveChanges();
             return "Tråd created";
+        }
+
+        public string CreateKommentar(int trådID, int brugerID, string tekst)
+        {
+            Tråd tråd = db.Tråde.FirstOrDefault(t => t.TrådID == trådID);
+            Bruger bruger = db.Brugerer.FirstOrDefault(b => b.BrugerID == brugerID);
+            tråd.KommentarListe.Add(new Kommentar { Bruger = bruger, Tekst = tekst });
+            db.SaveChanges();
+            return "Kommentar created";
         }
 
 

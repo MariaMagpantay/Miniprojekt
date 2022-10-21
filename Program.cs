@@ -106,8 +106,20 @@ app.MapPost("/api/tråde", (DataService service, NewTrådData data) =>
 });
 
 
+app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int id) =>
+{
+    string result = service.CreateKommentar(id, data.BrugerID, data.Tekst);
+    return new { message = result };
+});
+
+
 //PUT
+
+
+
+
 
 app.Run();
 
 record NewTrådData(int BrugerID, string Overskrift, string Indhold);
+record NewKommentarData(int BrugerID, string Tekst);
