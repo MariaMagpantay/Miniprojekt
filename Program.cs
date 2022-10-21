@@ -57,18 +57,57 @@ app.Use(async (context, next) =>
     await next(context);
 });
 
+
+//MapGet test
 app.MapGet("/", (DataService service) =>
 {
     return new { message = "Hello World!" };
 });
 
+
+//GET 
 app.MapGet("/api/tråde", (DataService service) =>
 {
-    return service.GetTråde().Select(t => new {
-        TrådId = t.TrådID,
-        KommentarListe = t.KommentarListe
+    return service.GetAlleTråde().Select(t => new {
+        trådId = t.TrådID,
+        dato = t.Dato,
+        overskrift = t.Overskrift,
+        indhold = t.Indhold,
+        bruger = new
+        {
+            t.Bruger.BrugerID,
+            t.Bruger.BrugerNavn
+        }
+
     });
 });
 
 
+app.MapGet("/api/tråd/{id}", (DataService service, int id) => {
+    return service.GetTråd(id);
+});
+
+
+///////////Er dennne nødvendig?
+app.MapGet("/api/kommentarer", (DataService service) =>
+{
+    return service.GetAlleKommentarer().Select(t => new {
+        trådId = t.TrådID,
+        kommentarListe = t.KommentarListe
+    });
+});
+
+
+//POST
+app.MapPost("/api/tråde", (DataService service, NewTrådData data) =>
+{
+    string result = service.CreateTråd(data.BrugerID, data.Overskrift, data.Indhold);
+    return new { message = result };
+});
+
+
+//PUT
+
 app.Run();
+
+record NewTrådData(int BrugerID, string Overskrift, string Indhold);

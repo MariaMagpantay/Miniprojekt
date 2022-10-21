@@ -27,11 +27,11 @@
         public Bruger Bruger { get; set; }
         public string Overskrift { get; set; }
         public long Stemmer { get; set; }
-        public DateTime? Dato { get; set; }
+        public DateTime Dato { get; set; } = DateTime.Now;
         public string Indhold { get; set; }
         public List<Kommentar> KommentarListe { get; set; } = new List<Kommentar>();
-
-       public Tråd()
+        
+        public Tråd()
         {
 
         }

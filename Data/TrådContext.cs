@@ -6,6 +6,8 @@ namespace Data
     public class TrådContext : DbContext
     {
         public DbSet<Tråd> Tråde => Set<Tråd>();
+        public DbSet<Kommentar> Kommentarer => Set<Kommentar>();
+        public DbSet<Bruger> Brugerer => Set<Bruger>();
 
         public TrådContext(DbContextOptions<TrådContext> options)
            : base(options)
