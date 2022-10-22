@@ -8,6 +8,7 @@ using Service;
 var builder = WebApplication.CreateBuilder(args);
 
 // Sætter CORS så API'en kan bruges fra andre domæner
+// Vi bruger denne så vi kan bruge API'en i vores blazor WebApp
 var AllowSomeStuff = "_AllowSomeStuff";
 builder.Services.AddCors(options =>
 {
@@ -48,6 +49,8 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseHttpsRedirection();
+
+//Tillader CROS
 app.UseCors(AllowSomeStuff);
 
 // Middlware der kører før hver request. Sætter ContentType for alle responses til "JSON".
@@ -66,7 +69,7 @@ app.MapGet("/", (DataService service) =>
 
 
 //GET 
-app.MapGet("/api/tråde", (DataService service) =>
+app.MapGet("/api/tråde", (DataService service) => //Henter alle tråde, uden kommentarer
 {
     return service.GetAlleTråde().Select(t => new {
         trådId = t.TrådID,
@@ -83,13 +86,14 @@ app.MapGet("/api/tråde", (DataService service) =>
 });
 
 
-app.MapGet("/api/tråd/{id}", (DataService service, int id) => {
+app.MapGet("/api/tråd/{id}", (DataService service, int id) => //Henter en tråd på et bestemt id
+{
     return service.GetTråd(id);
 });
 
 
 ///////////Er dennne nødvendig?
-app.MapGet("/api/kommentarer", (DataService service) =>
+app.MapGet("/api/kommentarer", (DataService service) => //Henter alle kommentarer fra alle tråde
 {
     return service.GetAlleKommentarer().Select(t => new {
         trådId = t.TrådID,
@@ -99,14 +103,14 @@ app.MapGet("/api/kommentarer", (DataService service) =>
 
 
 //POST
-app.MapPost("/api/tråde", (DataService service, NewTrådData data) =>
+app.MapPost("/api/tråde", (DataService service, NewTrådData data) => //Laver en ny tråd
 {
     string result = service.CreateTråd(data.BrugerID, data.Overskrift, data.Indhold);
     return new { message = result };
 });
 
 
-app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int id) =>
+app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int id) => //Laver en ny kommentart på en bestemt tråd (specificeret på TrådID)
 {
     string result = service.CreateKommentar(id, data.BrugerID, data.Tekst);
     return new { message = result };
@@ -114,7 +118,18 @@ app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int i
 
 
 //PUT
+app.MapPut("/api/tråd/{id}", (DataService service, UpdateStemmer data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
+{
+    string result = service.StemmerTråd(id, data.Stemmer);
+    return new { message = result };
+});
 
+
+app.MapPut("/api/kommentar/{id}", (DataService service, UpdateStemmer data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+{
+    string result = service.StemmerKommentar(id, data.Stemmer);
+    return new { message = result };
+});
 
 
 
@@ -123,3 +138,4 @@ app.Run();
 
 record NewTrådData(int BrugerID, string Overskrift, string Indhold);
 record NewKommentarData(int BrugerID, string Tekst);
+record UpdateStemmer(int Stemmer);

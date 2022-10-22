@@ -5,6 +5,7 @@ namespace Data
 {
     public class TrådContext : DbContext
     {
+        //Pas... Felter måske?? De ændre i hvert fald tabelnavnene i databasen
         public DbSet<Tråd> Tråde => Set<Tråd>();
         public DbSet<Kommentar> Kommentarer => Set<Kommentar>();
         public DbSet<Bruger> Brugerer => Set<Bruger>();

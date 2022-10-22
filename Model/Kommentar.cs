@@ -2,6 +2,7 @@
 {
     public class Kommentar
     {
+        //Konstrukterer
         public Kommentar(long kommentarID, string tekst, Bruger bruger, long stemmer, DateTime dato = new DateTime())
         {
             this.KommentarID = kommentarID;
@@ -18,7 +19,7 @@
             this.Stemmer = stemmer;
         }
 
-
+        //Felter
         public long KommentarID { get; set; }   
         public string Tekst { get; set; }
         public Bruger Bruger { get; set; }
@@ -26,6 +27,7 @@
         public DateTime Dato { get; set; } = DateTime.Now; 
        
 
+        //Tom konstrukter
         public Kommentar ()
         {
 

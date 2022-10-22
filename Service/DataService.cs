@@ -13,6 +13,7 @@ namespace Service
             this.db = db;
         }
 
+        //Test data
         public void SeedData()
         {
             Tråd tråd = db.Tråde.FirstOrDefault()!;
@@ -27,7 +28,7 @@ namespace Service
             testTråd.KommentarListe.Add(testKommentar);
             testTråd.KommentarListe.Add(testKommentar2);
             testTråd1.KommentarListe.Add(testKommentar3);
-            if (tråd == null)
+            if (tråd == null) //Hvis der ingen tråde er i databasen, indsættes testTråd og testTråd1
             {
                 db.Tråde.Add(testTråd);
                 db.Tråde.Add(testTråd1);
@@ -36,22 +37,14 @@ namespace Service
             db.SaveChanges();
         }
 
-        private readonly HttpClient httpClient;
-
-        public DataService(HttpClient httpClient)
-        {
-            this.httpClient = httpClient;
-        }
-
-
 
         //GET metoder
-        public List<Tråd> GetAlleTråde()
+        public List<Tråd> GetAlleTråde() //Henter alle tråde, uden kommentarer og includerer brugeren=forfatteren af tråden
         {
             return db.Tråde.Include(t => t.Bruger).ToList();
         }
 
-        public Tråd GetTråd(int id)
+        public Tråd GetTråd(int id) //Henter en tråd på et specifikt id, med tilhørende kmmentarer. Include Bruger = forfatteren af tråden. ThenInclude Bruger = forfatter af kommentaren
         {
             return db.Tråde.Include(t => t.Bruger).Include(t => t.KommentarListe).ThenInclude(t => t.Bruger).FirstOrDefault(t => t.TrådID == id);
             //var result = await httpClient.GetFromJsonAsync<Tråd>("api/tråd/" + id);
@@ -59,7 +52,7 @@ namespace Service
         }
 
         //////////Er nedenstående metode nødvendig?
-        public List<Tråd> GetAlleKommentarer()
+        public List<Tråd> GetAlleKommentarer() //Henter alle kommentarer, og hvilken TrådID de tilhører
         {
             return db.Tråde.Include(t => t.KommentarListe).ThenInclude(t => t.Bruger).ToList();
         }
@@ -67,7 +60,7 @@ namespace Service
 
 
         //POST metoder
-        public string CreateTråd(int brugerID, string overskrift, string indhold)
+        public string CreateTråd(int brugerID, string overskrift, string indhold) //Laver en ny tråd
         {
             Bruger bruger = db.Brugerer.FirstOrDefault(b => b.BrugerID == brugerID);
             db.Tråde.Add(new Tråd { Bruger = bruger, Overskrift = overskrift, Indhold = indhold });
@@ -75,9 +68,9 @@ namespace Service
             return "Tråd created";
         }
 
-        public string CreateKommentar(int trådID, int brugerID, string tekst)
+        public string CreateKommentar(int trådID, int brugerID, string tekst) //Laver en ny kommentar på et bestemt TrådID
         {
-            Tråd tråd = db.Tråde.FirstOrDefault(t => t.TrådID == trådID);
+            Tråd tråd = db.Tråde.FirstOrDefault(t => t.TrådID == trådID); 
             Bruger bruger = db.Brugerer.FirstOrDefault(b => b.BrugerID == brugerID);
             tråd.KommentarListe.Add(new Kommentar { Bruger = bruger, Tekst = tekst });
             db.SaveChanges();
@@ -86,5 +79,30 @@ namespace Service
 
 
         //PUT metoder
+        public string StemmerTråd(int trådID, int stemmer) //Opdaterer antal stemmer på et bestemt TrådID
+        {
+            Tråd tråd = db.Tråde.Where(t => t.TrådID == trådID).FirstOrDefault<Tråd>();
+            if (tråd != null)
+            {
+                tråd.Stemmer = stemmer;
+
+                db.SaveChanges();
+            }
+            return "Tråd stemmer updated";
+        }
+               
+         
+    public string StemmerKommentar(int kommentarID, int stemmer) //Opdaterer antal stemmer på et bestemt KommentarID
+        {
+            Kommentar kommentar = db.Kommentarer.Where(k => k.KommentarID == kommentarID).FirstOrDefault<Kommentar>();
+            if (kommentar != null)
+            {
+                kommentar.Stemmer = stemmer;
+
+                db.SaveChanges();
+            }
+            return "Kommentar stemmer updated";
+        }
+
     }
 }

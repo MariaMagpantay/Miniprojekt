@@ -2,6 +2,7 @@
 {
     public class Tråd
     {
+        //Kontrukterer 
         public Tråd (long trådID, Bruger bruger, string overskrift, long stemmer, DateTime dato, string indhold, List<Kommentar> kommentarListe)
         {
             this.TrådID = trådID;
@@ -22,7 +23,7 @@
             this.Indhold = indhold;
         }
 
-
+        //Felter
         public long TrådID { get; set; }
         public Bruger Bruger { get; set; }
         public string Overskrift { get; set; }
@@ -31,6 +32,7 @@
         public string Indhold { get; set; }
         public List<Kommentar> KommentarListe { get; set; } = new List<Kommentar>();
         
+        //Tom kontruktor
         public Tråd()
         {
 
