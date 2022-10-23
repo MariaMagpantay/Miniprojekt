@@ -118,16 +118,27 @@ app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int i
 
 
 //PUT
-app.MapPut("/api/tråd/{id}", (DataService service, UpdateStemmer data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
+app.MapPut("/api/tråd/{id}/upvote", (DataService service, UpdateUpVotes data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
 {
-    string result = service.StemmerTråd(id, data.Stemmer);
+    string result = service.UpVotesTråd(id, data.UpVotes);
     return new { message = result };
 });
 
-
-app.MapPut("/api/kommentar/{id}", (DataService service, UpdateStemmer data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+app.MapPut("/api/tråd/{id}/downvote", (DataService service, UpdateDownVotes data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
 {
-    string result = service.StemmerKommentar(id, data.Stemmer);
+    string result = service.DownVotesTråd(id, data.DownVotes);
+    return new { message = result };
+});
+
+app.MapPut("/api/kommentar/{id}/upvote", (DataService service, UpdateUpVotes data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+{
+    string result = service.UpVotesKommentar(id, data.UpVotes);
+    return new { message = result };
+});
+
+app.MapPut("/api/kommentar/{id}/downvote", (DataService service, UpdateDownVotes data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+{
+    string result = service.DownVotesKommentar(id, data.DownVotes);
     return new { message = result };
 });
 
@@ -138,4 +149,5 @@ app.Run();
 
 record NewTrådData(int BrugerID, string Overskrift, string Indhold);
 record NewKommentarData(int BrugerID, string Tekst);
-record UpdateStemmer(int Stemmer);
+record UpdateUpVotes(int UpVotes);
+record UpdateDownVotes(int DownVotes);

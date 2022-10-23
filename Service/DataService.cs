@@ -20,11 +20,11 @@ namespace Service
             Bruger brugersalsa = new Bruger(1, "SalsaMan");
             Bruger bror = new Bruger(2, "Brother");
             Bruger suppemand = new Bruger(3, "HSM Fan no.1");
-            Kommentar testKommentar = new Kommentar(1, "test", brugersalsa, 0, new DateTime(2022, 10, 12));
-            Kommentar testKommentar2 = new Kommentar(2, "JEG ELSKER SUPPE OG SHARPAY", suppemand, 1, new DateTime(2022, 10, 12));
-            Kommentar testKommentar3 = new Kommentar(3, "Jeg tester lige kommentaren", bror, 5, new DateTime(2022, 10, 21));
-            Tråd testTråd = new Tråd(1, bror, "test overskrift", 0, new DateTime(2022, 10, 12), "test indhold");
-            Tråd testTråd1 = new Tråd(2, brugersalsa, "test test", 0, new DateTime(2022, 10, 21), "test indhold til tråd 2");
+            Kommentar testKommentar = new Kommentar(1, "test", brugersalsa, 0, 0, new DateTime(2022, 10, 12));
+            Kommentar testKommentar2 = new Kommentar(2, "JEG ELSKER SUPPE OG SHARPAY", suppemand, 2, 1, new DateTime(2022, 10, 12));
+            Kommentar testKommentar3 = new Kommentar(3, "Jeg tester lige kommentaren", bror, 2, 5, new DateTime(2022, 10, 21));
+            Tråd testTråd = new Tråd(1, bror, "test overskrift", 0, 0, new DateTime(2022, 10, 12), "test indhold");
+            Tråd testTråd1 = new Tråd(2, brugersalsa, "test test", 0, 2, new DateTime(2022, 10, 21), "test indhold til tråd 2");
             testTråd.KommentarListe.Add(testKommentar);
             testTråd.KommentarListe.Add(testKommentar2);
             testTråd1.KommentarListe.Add(testKommentar3);
@@ -79,30 +79,51 @@ namespace Service
 
 
         //PUT metoder
-        public string StemmerTråd(int trådID, int stemmer) //Opdaterer antal stemmer på et bestemt TrådID
+        public string UpVotesTråd(int trådID, int upvotes) //Opdaterer antal upvotes på et bestemt TrådID
         {
             Tråd tråd = db.Tråde.Where(t => t.TrådID == trådID).FirstOrDefault<Tråd>();
             if (tråd != null)
             {
-                tråd.Stemmer = stemmer;
+                tråd.UpVotes = upvotes;
+               
+                db.SaveChanges();
+            }
+            return "Tråd stemmer updated";
+        }
+        public string DownVotesTråd(int trådID, int downvotes) //Opdaterer antal downvotes på et bestemt TrådID
+        {
+            Tråd tråd = db.Tråde.Where(t => t.TrådID == trådID).FirstOrDefault<Tråd>();
+            if (tråd != null)
+            {
+                tråd.DownVotes = downvotes;
 
                 db.SaveChanges();
             }
             return "Tråd stemmer updated";
         }
-               
-         
-    public string StemmerKommentar(int kommentarID, int stemmer) //Opdaterer antal stemmer på et bestemt KommentarID
+
+        public string UpVotesKommentar(int kommentarID, int upvotes) //Opdaterer antal upvotes på et bestemt KommentarID
         {
             Kommentar kommentar = db.Kommentarer.Where(k => k.KommentarID == kommentarID).FirstOrDefault<Kommentar>();
             if (kommentar != null)
             {
-                kommentar.Stemmer = stemmer;
-
+                kommentar.UpVotes = upvotes;
+               
                 db.SaveChanges();
             }
             return "Kommentar stemmer updated";
         }
 
+        public string DownVotesKommentar(int kommentarID, int downvotes) //Opdaterer antal downvotes på et bestemt KommentarID
+        {
+            Kommentar kommentar = db.Kommentarer.Where(k => k.KommentarID == kommentarID).FirstOrDefault<Kommentar>();
+            if (kommentar != null)
+            {
+                kommentar.DownVotes = downvotes;
+
+                db.SaveChanges();
+            }
+            return "Kommentar stemmer updated";
+        }
     }
 }
