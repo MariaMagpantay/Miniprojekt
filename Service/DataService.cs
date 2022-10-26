@@ -42,7 +42,7 @@ namespace Service
         //GET metoder
         public List<Tråd> GetAlleTråde() //Henter alle tråde, uden kommentarer og includerer brugeren=forfatteren af tråden
         {
-            return db.Tråde.Include(t => t.Bruger).OrderByDescending(w => w.Dato).ToList();
+            return db.Tråde.Include(t => t.Bruger).OrderByDescending(w => w.Dato).Take(50).ToList();
         }
 
         public Tråd GetTråd(int id) //Henter en tråd på et specifikt id, med tilhørende kmmentarer. Include Bruger = forfatteren af tråden. ThenInclude Bruger = forfatter af kommentaren
