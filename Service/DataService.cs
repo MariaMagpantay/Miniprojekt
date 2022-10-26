@@ -1,6 +1,7 @@
 ﻿using Data;
 using Microsoft.EntityFrameworkCore;
 using Model;
+using System.Linq;
 
 namespace Service
 {
@@ -41,7 +42,7 @@ namespace Service
         //GET metoder
         public List<Tråd> GetAlleTråde() //Henter alle tråde, uden kommentarer og includerer brugeren=forfatteren af tråden
         {
-            return db.Tråde.Include(t => t.Bruger).ToList();
+            return db.Tråde.Include(t => t.Bruger).OrderByDescending(w => w.Dato).ToList();
         }
 
         public Tråd GetTråd(int id) //Henter en tråd på et specifikt id, med tilhørende kmmentarer. Include Bruger = forfatteren af tråden. ThenInclude Bruger = forfatter af kommentaren
