@@ -3,7 +3,7 @@
     public class Tråd
     {
         //Konstrukterer 
-        public Tråd (long trådID, Bruger bruger, string overskrift, long upvotes, long downvotes, DateTime dato, string indhold, List<Kommentar> kommentarListe)
+        public Tråd (int trådID, Bruger bruger, string overskrift, int upvotes, int downvotes, DateTime dato, string indhold, List<Kommentar> kommentarListe)
         {
             this.TrådID = trådID;
             this.Bruger = bruger;
@@ -14,7 +14,7 @@
             this.Indhold = indhold;
             this.KommentarListe = kommentarListe;
         }
-        public Tråd(long trådID, Bruger bruger, string overskrift, long upvotes, long downvotes, DateTime dato, string indhold)
+        public Tråd(int trådID, Bruger bruger, string overskrift, int upvotes, int downvotes, DateTime dato, string indhold)
         {
             this.TrådID = trådID;
             this.Bruger = bruger;
@@ -26,11 +26,11 @@
         }
 
         //Felter
-        public long TrådID { get; set; }
+        public int TrådID { get; set; }
         public Bruger Bruger { get; set; }
         public string Overskrift { get; set; }
-        public long UpVotes { get; set; }
-        public long DownVotes { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
         public DateTime Dato { get; set; } = DateTime.Now;
         public string Indhold { get; set; }
         public List<Kommentar> KommentarListe { get; set; } = new List<Kommentar>();

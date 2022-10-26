@@ -76,6 +76,8 @@ app.MapGet("/api/tråde", (DataService service) => //Henter alle tråde, uden komm
         dato = t.Dato,
         overskrift = t.Overskrift,
         indhold = t.Indhold,
+        upvotes = t.UpVotes,
+        downvotes = t.DownVotes,
         bruger = new
         {
             t.Bruger.BrugerID,
@@ -118,27 +120,29 @@ app.MapPost("/api/tråd/{id}", (DataService service, NewKommentarData data, int i
 
 
 //PUT
-app.MapPut("/api/tråd/{id}/upvote", (DataService service, UpdateUpVotes data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
+app.MapPut("/api/tråd/{id}/upvote", (DataService service, int id) => //Opdaterer antal upvotes på en bestemt tråd (specificeret på TrådID)
 {
-    string result = service.UpVotesTråd(id, data.UpVotes);
+    Console.WriteLine("API ramt");
+    string result = service.UpVotesTråd(id);
+    Console.WriteLine(result); 
     return new { message = result };
 });
 
-app.MapPut("/api/tråd/{id}/downvote", (DataService service, UpdateDownVotes data, int id) => //Opdaterer antal stemmer på en bestemt tråd (specificeret på TrådID)
+app.MapPut("/api/tråd/{id}/downvote", (DataService service, int id) => //Opdaterer antal downvotes på en bestemt tråd (specificeret på TrådID)
 {
-    string result = service.DownVotesTråd(id, data.DownVotes);
+    string result = service.DownVotesTråd(id);
     return new { message = result };
 });
 
-app.MapPut("/api/kommentar/{id}/upvote", (DataService service, UpdateUpVotes data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+app.MapPut("/api/kommentar/{id}/upvote", (DataService service, int id) => //Opdaterer antal upvotes på en bestemt kommentar (specificeret på KommentarID)
 {
-    string result = service.UpVotesKommentar(id, data.UpVotes);
+    string result = service.UpVotesKommentar(id);
     return new { message = result };
 });
 
-app.MapPut("/api/kommentar/{id}/downvote", (DataService service, UpdateDownVotes data, int id) => //Opdaterer antal stemmer på en bestemt kommentar (specificeret på KommentarID)
+app.MapPut("/api/kommentar/{id}/downvote", (DataService service, int id) => //Opdaterer antal downvotes på en bestemt kommentar (specificeret på KommentarID)
 {
-    string result = service.DownVotesKommentar(id, data.DownVotes);
+    string result = service.DownVotesKommentar(id);
     return new { message = result };
 });
 
@@ -149,5 +153,5 @@ app.Run();
 
 record NewTrådData(int BrugerID, string Overskrift, string Indhold);
 record NewKommentarData(int BrugerID, string Tekst);
-record UpdateUpVotes(int UpVotes);
-record UpdateDownVotes(int DownVotes);
+//record UpdateUpVotes(int UpVotes);
+//record UpdateDownVotes(int DownVotes);

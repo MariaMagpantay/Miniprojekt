@@ -79,47 +79,47 @@ namespace Service
 
 
         //PUT metoder
-        public string UpVotesTråd(int trådID, int upvotes) //Opdaterer antal upvotes på et bestemt TrådID
+        public string UpVotesTråd(int trådID) //Opdaterer antal upvotes på et bestemt TrådID
         {
             Tråd tråd = db.Tråde.Where(t => t.TrådID == trådID).FirstOrDefault<Tråd>();
             if (tråd != null)
             {
-                tråd.UpVotes = upvotes;
+                tråd.UpVotes = tråd.UpVotes + 1;
                
                 db.SaveChanges();
             }
             return "Tråd stemmer updated";
         }
-        public string DownVotesTråd(int trådID, int downvotes) //Opdaterer antal downvotes på et bestemt TrådID
+        public string DownVotesTråd(int trådID) //Opdaterer antal downvotes på et bestemt TrådID
         {
             Tråd tråd = db.Tråde.Where(t => t.TrådID == trådID).FirstOrDefault<Tråd>();
             if (tråd != null)
             {
-                tråd.DownVotes = downvotes;
+                tråd.DownVotes ++;
 
                 db.SaveChanges();
             }
             return "Tråd stemmer updated";
         }
 
-        public string UpVotesKommentar(int kommentarID, int upvotes) //Opdaterer antal upvotes på et bestemt KommentarID
+        public string UpVotesKommentar(int kommentarID) //Opdaterer antal upvotes på et bestemt KommentarID
         {
             Kommentar kommentar = db.Kommentarer.Where(k => k.KommentarID == kommentarID).FirstOrDefault<Kommentar>();
             if (kommentar != null)
             {
-                kommentar.UpVotes = upvotes;
+                kommentar.UpVotes ++;
                
                 db.SaveChanges();
             }
             return "Kommentar stemmer updated";
         }
 
-        public string DownVotesKommentar(int kommentarID, int downvotes) //Opdaterer antal downvotes på et bestemt KommentarID
+        public string DownVotesKommentar(int kommentarID) //Opdaterer antal downvotes på et bestemt KommentarID
         {
             Kommentar kommentar = db.Kommentarer.Where(k => k.KommentarID == kommentarID).FirstOrDefault<Kommentar>();
             if (kommentar != null)
             {
-                kommentar.DownVotes = downvotes;
+                kommentar.DownVotes ++;
 
                 db.SaveChanges();
             }
